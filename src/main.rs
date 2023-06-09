@@ -198,12 +198,12 @@ fn encrypt_dir(path: &str, key: &[u8; 16]) -> Result<usize, Error> {
         if filetype.is_file() {
             println!("{} {}", lc!("[#] Encrypting:"), entry.path().display());
 
-            if ! encrypt_file(entry.path().to_str().unwrap(), &key).unwrap() {
-                println!("{} {}", lc!("[-] Failed to encrypt"), entry.path().to_str().unwrap());
-                continue;
+            match encrypt_file(entry.path().to_str().unwrap(), &key) {
+                Ok(b)  => { if b { counter += 1 } },
+                Err(e) => {
+                    println!("{} {}", lc!("[-] Failed:"), e)
+                }
             }
-
-            counter += 1;
         }
         else
         if filetype.is_dir() {
@@ -227,13 +227,13 @@ fn decrypt_dir(path: &str, key: &[u8; 16]) -> Result<usize, Error> {
             }
 
             println!("{} {}", lc!("[#] Decrypting:"), entry.path().display());
-
-            if ! decrypt_file(entry.path().to_str().unwrap(), &key).unwrap() {
-                println!("{} {}", lc!("[-] Failed to decrypt"), entry.path().to_str().unwrap());
-                continue;
+    
+            match decrypt_file(entry.path().to_str().unwrap(), &key) {
+                Ok(b)  => { if b { counter += 1 } },
+                Err(e) => {
+                    println!("{} {}", lc!("[-] Failed:"), e)
+                }
             }
-
-            counter += 1;
         }
         else
         if filetype.is_dir() {
