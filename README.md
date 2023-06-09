@@ -43,6 +43,7 @@ $ nukrypt encrypt ./encrypt-me/
 ### Decrypt
 When called with `decrypt`, `nukrypt` will attempt to read the key from the `nukrypt.key` file in the current working directory and recursively decrypt all `dir`s.
 ```
+$ nukrypt decrypt ./encrypt-me/
 [#] Decrypting: ./encrypt-me/notes.txt.nukrypt
 [#] Decrypting: ./encrypt-me/project/curriculum.pdf.nukrypt
 [#] Decrypting: ./encrypt-me/project/accounting.xlsx.nukrypt
