@@ -37,7 +37,7 @@ $ nukrypt encrypt ./encrypt-me/
 [#] Encrypting: ./encrypt-me/project/curriculum.pdf
 [#] Encrypting: ./encrypt-me/project/accounting.xlsx
 
-[+] 3 files encrypted
+[+] 3 files encrypted in 0.002 seconds
 ```
 
 ### Decrypt
@@ -48,5 +48,5 @@ $ nukrypt decrypt ./encrypt-me/
 [#] Decrypting: ./encrypt-me/project/curriculum.pdf.nukrypt
 [#] Decrypting: ./encrypt-me/project/accounting.xlsx.nukrypt
 
-[+] 3 files decrypted
+[+] 3 files decrypted in 0.000 seconds
 ```
