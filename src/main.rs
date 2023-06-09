@@ -1,6 +1,7 @@
 use std::{env, fs};
 use std::fs::File;
 use std::path::Path;
+use std::time::Instant;
 use std::io::{Read, Write, Error, ErrorKind};
 
 use rand::{Rng};
@@ -69,6 +70,7 @@ fn main() {
     }
 
     let mut counter : usize = 0;
+    let before = Instant::now();
 
     for i in 2..args.len() {
         if ! Path::new(&args[i]).is_dir() {
@@ -85,10 +87,16 @@ fn main() {
     }
 
     if decrypt {
-        println!("\n{} {} {}", lc!("[+]"), counter, lc!("files decrypted"));
+        println!(
+            "\n{} {} {} {:.3} {}", lc!("[+]"), counter, lc!("files decrypted in"),
+            (before.elapsed().as_millis() as f32) / 1000.0, lc!("seconds")
+        );
     }
     else {
-        println!("\n{} {} {}", lc!("[+]"), counter, lc!("files encrypted"));
+        println!(
+            "\n{} {} {} {:.3} {}", lc!("[+]"), counter, lc!("files encrypted in"),
+            (before.elapsed().as_millis() as f32) / 1000.0, lc!("seconds")
+        );
     }
 }
 
