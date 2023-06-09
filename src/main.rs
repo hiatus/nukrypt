@@ -68,6 +68,8 @@ fn main() {
         }
     }
 
+    let mut counter : usize = 0;
+
     for i in 2..args.len() {
         if ! Path::new(&args[i]).is_dir() {
             println!("{} {}", lc!("[!] No such directory:"), &args[i]);
@@ -75,13 +77,18 @@ fn main() {
         }
 
         if decrypt {
-            let n = decrypt_dir(&args[i], &key).unwrap();
-            println!("\n{} {} {}", lc!("[+]"), n, lc!("files decrypted"));
+            counter += decrypt_dir(&args[i], &key).unwrap();
         }
         else {
-            let n = encrypt_dir(&args[i], &key).unwrap();
-            println!("\n{} {} {}", lc!("[+]"), n, lc!("files encrypted"));
+            counter += encrypt_dir(&args[i], &key).unwrap();
         }
+    }
+
+    if decrypt {
+        println!("\n{} {} {}", lc!("[+]"), counter, lc!("files decrypted"));
+    }
+    else {
+        println!("\n{} {} {}", lc!("[+]"), counter, lc!("files encrypted"));
     }
 }
 
@@ -170,8 +177,8 @@ fn decrypt_file(path: &str, key: &[u8; 16]) -> Result<bool, Error> {
     Ok(true)
 }
 
-fn encrypt_dir(path: &str, key: &[u8; 16]) -> Result<u32, Error> {
-    let mut counter: u32 = 0;
+fn encrypt_dir(path: &str, key: &[u8; 16]) -> Result<usize, Error> {
+    let mut counter: usize = 0;
 
     for e in fs::read_dir(path).unwrap() {
         let entry = e.unwrap();
@@ -196,8 +203,8 @@ fn encrypt_dir(path: &str, key: &[u8; 16]) -> Result<u32, Error> {
     Ok(counter)
 }
 
-fn decrypt_dir(path: &str, key: &[u8; 16]) -> Result<u32, Error> {
-    let mut counter: u32 = 0;
+fn decrypt_dir(path: &str, key: &[u8; 16]) -> Result<usize, Error> {
+    let mut counter: usize = 0;
 
     for e in fs::read_dir(path).unwrap() {
         let entry = e.unwrap();
