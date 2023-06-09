@@ -31,7 +31,6 @@ fn main() {
     if args[1].eq(lc!("decrypt").as_str()) {
         decrypt = true;
 
-        // Read key from nukey.dat
         match read_key(nukrypt_key!().as_str(), &mut key) {
             Ok(_)  => (),
             Err(_) => {
@@ -42,13 +41,11 @@ fn main() {
     }
     else
     if args[1].eq(lc!("encrypt").as_str()) {
-        // Check if a key exists
         if Path::new(&nukrypt_key!()).is_file() {
             println!("{} {} {}", lc!("[!] A key file"), nukrypt_key!(), lc!("already exists"));
             return;
         }
 
-        // Generate and drop key
         key = rand::thread_rng().gen::<[u8; 16]>();
 
         match write_key(nukrypt_key!().as_str(), &key) {
@@ -64,7 +61,6 @@ fn main() {
         return;
     }
 
-    // First check if all folders exist
     for i in 2..args.len() {
         if ! Path::new(&args[i]).is_dir() {
             println!("{} {}", lc!("[!] No such directory:"), &args[i]);
