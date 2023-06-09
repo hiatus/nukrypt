@@ -126,10 +126,8 @@ fn encrypt_file(path: &str, key: &[u8; 16]) -> Result<bool, Error> {
         }
 
         let cipher_block = cipher.cbc_encrypt(&iv, &buffer[..n]);    
-        let n = fout.write(&cipher_block)?;
 
-        if n == 0 {
-            println!("{}", lc!("cannot write any more"));
+        if fout.write(&cipher_block)? == 0 {
             break;
         }
     }
@@ -164,7 +162,6 @@ fn decrypt_file(path: &str, key: &[u8; 16]) -> Result<bool, Error> {
         let cipher_block = cipher.cbc_decrypt(&iv, &buffer[..n]);
 
         if fout.write(&cipher_block)? == 0 {
-            println!("{}", lc!("cannot write any more"));
             break;
         }
     }
