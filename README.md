@@ -1,6 +1,6 @@
 nukrypt
 =======
-A simple ransomware PoC written in Rust. `nukrypt` will recursively traverse all directories given to it as CLI arguments and encrypt files using AES128. The 128-bit key is generated at runtime and dropped at the current working directory. The AES IV is written to the beginning of each encrypted file. Encrypted files are suffixed with `.nukrypt`.
+A simple ransomware PoC written in Rust. `nukrypt` will recursively traverse all directories given to it as CLI arguments and encrypt files using AES128. The 128-bit key is generated at runtime and dropped at the current working directory (if it does not exist). The AES IV is written to the beginning of each encrypted file. Encrypted files are suffixed with `.nukrypt`.
 
 
 Features
@@ -27,7 +27,7 @@ nukrypt [encrypt|decrypt] [dir]..
 ```
 
 ### Encrypt
-When called with `encrypt`, `nukrypt` will first generate a 128-bit key and write it to a file called `nukrypt.key` at the current working directory; if this file already exists, the program will safely exit. After key generation, all `dir`s will be recursively encrypted.
+When called with `encrypt`, `nukrypt` will first generate a 128-bit key and write it to a file called `nukrypt.key` at the current working directory; if the file already exists, `nukrypt` will read it instead of overwriting it. After key generation, all `dir`s will be recursively encrypted.
 
 ```
 $ nukrypt encrypt ./encrypt-me/

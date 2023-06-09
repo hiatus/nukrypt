@@ -19,6 +19,7 @@ use_litcrypt!("nukrypt");
 
 
 fn main() {
+    let key_exists: bool;
     let mut decrypt: bool = false;
     let mut key : [u8; 16] = [0u8; 16];
 
@@ -29,31 +30,33 @@ fn main() {
         return;
     }
 
-    if args[1].eq(lc!("decrypt").as_str()) {
-        decrypt = true;
-
-        match read_key(nukrypt_key!().as_str(), &mut key) {
-            Ok(_)  => (),
-            Err(_) => {
-                println!("{} {}", lc!("[!] Failed to read encryption key from"), nukrypt_key!());
-                return;
-            }
-        }
+    match read_key(nukrypt_key!().as_str(), &mut key) {
+        Ok(_)  => { key_exists = true },
+        Err(_) => { key_exists = false }
     }
-    else
-    if args[1].eq(lc!("encrypt").as_str()) {
-        if Path::new(&nukrypt_key!()).is_file() {
-            println!("{} {} {}", lc!("[!] A key file"), nukrypt_key!(), lc!("already exists"));
+
+    if args[1].eq(lc!("decrypt").as_str()) {
+        if ! key_exists {
+            println!("{} {}", lc!("[!] Failed to read encryption key from"), nukrypt_key!());
             return;
         }
 
-        key = rand::thread_rng().gen::<[u8; 16]>();
+        decrypt = true;
+    }
+    else
+    if args[1].eq(lc!("encrypt").as_str()) {
+        if key_exists {
+            println!("{} {}\n", lc!("[+] Encryption key read from"), nukrypt_key!());
+        }
+        else {
+            key = rand::thread_rng().gen::<[u8; 16]>();
 
-        match write_key(nukrypt_key!().as_str(), &key) {
-            Ok(_)  => println!("{} {}\n", lc!("[+] Encryption key saved to"), nukrypt_key!()),
-            Err(_) => {
-                println!("{} {}", lc!("[!] Failed to write encryption key to"), nukrypt_key!());
-                return;
+            match write_key(nukrypt_key!().as_str(), &key) {
+                Ok(_)  => println!("{} {}\n", lc!("[+] Encryption key saved to"), nukrypt_key!()),
+                Err(_) => {
+                    println!("{} {}", lc!("[!] Failed to write encryption key to"), nukrypt_key!());
+                    return;
+                }
             }
         }
     }
