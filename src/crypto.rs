@@ -107,7 +107,7 @@ pub fn decrypt_file(path: &str, key: &[u8; SIZE_KEY]) -> Result<bool, Error> {
 	Ok(true)
 }
     
-pub fn encrypt_dir(path: &str, key: &[u8; SIZE_KEY]) -> Result<usize, Error> {
+pub fn encrypt_dir(path: &str, key: &[u8; SIZE_KEY]) -> usize {
 	let mut counter: usize = 0;
 
 	for e in fs::read_dir(path).unwrap() {
@@ -124,14 +124,14 @@ pub fn encrypt_dir(path: &str, key: &[u8; SIZE_KEY]) -> Result<usize, Error> {
 		}
 		else
 		if filetype.is_dir() {
-			counter += encrypt_dir(entry.path().to_str().unwrap(), key).unwrap();
+			counter += encrypt_dir(entry.path().to_str().unwrap(), key);
 		}
 	}
 
-	Ok(counter)
+	counter
 }
 
-pub fn decrypt_dir(path: &str, key: &[u8; SIZE_KEY]) -> Result<usize, Error> {
+pub fn decrypt_dir(path: &str, key: &[u8; SIZE_KEY]) -> usize {
 	let mut counter: usize = 0;
 
 	for e in fs::read_dir(path).unwrap() {
@@ -152,9 +152,9 @@ pub fn decrypt_dir(path: &str, key: &[u8; SIZE_KEY]) -> Result<usize, Error> {
 		}
 		else
 		if filetype.is_dir() {
-			counter += decrypt_dir(entry.path().to_str().unwrap(), key).unwrap();
+			counter += decrypt_dir(entry.path().to_str().unwrap(), key);
 		}
 	}
 
-	Ok(counter)
+	counter
 }

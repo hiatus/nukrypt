@@ -77,10 +77,10 @@ fn main() {
 		}
 
 		if decrypt {
-			counter += crypto::decrypt_dir(&args[i], &key).unwrap();
+			counter += crypto::decrypt_dir(&args[i], &key);
 		}
 		else {
-			counter += crypto::encrypt_dir(&args[i], &key).unwrap();
+			counter += crypto::encrypt_dir(&args[i], &key);
 		}
 	}
 
