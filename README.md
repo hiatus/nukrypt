@@ -7,6 +7,7 @@ Features
 --------
 - AES128
 - Literal encryption using [litcrypt](https://docs.rs/litcrypt/latest/litcrypt/)
+- Download or upload AES key from a remote server.
 - Some safeguards to prevent unintended data loss.
 
 
@@ -22,16 +23,29 @@ $ cargo build --release
 
 Usage
 -----
+- Command line banner:
 ```
-nukrypt [encrypt|decrypt] [dir]..
+USAGE:
+    nukrypt [FLAGS] [OPTIONS] <dir>...
+
+FLAGS:
+    -d, --decrypt    Decrypt instead of encrypting
+    -h, --help       Prints help information
+    -V, --version    Prints version information
+
+OPTIONS:
+    -k, --key-file <file|url>    Read/write AES key from/to [file] or download/upload from/to [url]
+
+ARGS:
+    <dir>...    Folder(s) to recursively encrypt or decrypt
 ```
 
 ### Encrypt
-When called with `encrypt`, `nukrypt` will first generate a 128-bit key and write it to a file called `nukrypt.key` at the current working directory; if the file already exists, `nukrypt` will read it instead of overwriting it. After key generation, all `dir`s will be recursively encrypted.
+In encryption mode (not specifying the `-d` option), `nukrypt` will first attempt to read the key either from a remote server or from a local file (depending on what was given as argument to `-k`). If the key cannot be read, it will generate it and either upload it or save it locally (in the URL or path given). After this, all `dir`s will be recursively encrypted.
 
 ```
-$ nukrypt encrypt ./encrypt-me/
-[+] Encryption key saved to nukrypt.key
+$ nukrypt -k nukrypt.key ./encrypt-me/
+[+] Encryption key written to nukrypt.key
 
 [#] Encrypting: ./encrypt-me/notes.txt
 [#] Encrypting: ./encrypt-me/project/curriculum.pdf
@@ -41,9 +55,11 @@ $ nukrypt encrypt ./encrypt-me/
 ```
 
 ### Decrypt
-When called with `decrypt`, `nukrypt` will attempt to read the key from the `nukrypt.key` file in the current working directory and recursively decrypt all `dir`s.
+When called with option `-d`, `nukrypt` will attempt to read the key either from a remote server or from a local file and recursively decrypt all `dir`s.
 ```
-$ nukrypt decrypt ./encrypt-me/
+$ nukrypt -dk nukrypt.key ./encrypt-me/
+[+] AES key read from nukrypt.key
+
 [#] Decrypting: ./encrypt-me/notes.txt.nukrypt
 [#] Decrypting: ./encrypt-me/project/curriculum.pdf.nukrypt
 [#] Decrypting: ./encrypt-me/project/accounting.xlsx.nukrypt
