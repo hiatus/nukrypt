@@ -2,6 +2,8 @@ nukrypt
 =======
 A ransomware PoC written in Rust. `nukrypt` will recursively traverse all directories given to it as CLI arguments and encrypt files using AES128. The 128-bit key can either be generated at runtime or read/downloaded from an existing file/URL. The AES IV is written to the beginning of each encrypted file. Encrypted files are suffixed with `.nukrypt`.
 
+**Disclaimer**: the purpose of this project is to simulate the impact of ransomware during red team exercises and should not be used for illegal objectives.
+
 
 Features
 --------
